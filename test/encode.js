@@ -3,7 +3,7 @@ var vows = require('vows'),
     bleach = require('../lib/bleach');
 
 var HTML1 = 'This is <a href="#html">HTML</a> with a <script>\nvar x = 1;</script>SCRIPT',
-    HTML2 = 'This is &lt;a href=&quot;#html&quot;&gt;HTML&lt;/a&gt; with a SCRIPT',
+    HTML2 = 'This is &#x3C;a href=&#x22;#html&#x22;&#x3E;HTML&#x3C;/a&#x3E; with a SCRIPT',
     HTML3 = 'This is HTML with a SCRIPT';
 
 vows.describe('encode tests').addBatch({
