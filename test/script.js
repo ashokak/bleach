@@ -20,6 +20,20 @@ vows.describe('script tests').addBatch({
       var HTML = bleach.sanitize(HTML1, {mode: 'white', list:[]});
       assert.equal(HTML, HTML3);
     }
+  },
+
+  'blacklist mode': {
+    topic: function (){ return HTML1; },
+
+    'eliminates script tags but keeps unlisted tags': function (HTML1){
+      var HTML = bleach.sanitize(HTML1, {mode: 'black', list:['script']});
+      assert.equal(HTML, HTML2);
+    },
+
+    'eliminates all tags when all are blacklisted': function (HTML1){
+      var HTML = bleach.sanitize(HTML1, {mode: 'black', list:['a', 'script']});
+      assert.equal(HTML, HTML3);
+    }
   }
 
 }).export(module);
