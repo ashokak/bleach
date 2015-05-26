@@ -3,6 +3,7 @@ var vows = require('vows'),
     bleach = require('../lib/bleach');
 
 var HTML_LINK_SCRIPT = 'This is <a href="#html">HTML</a> with a <script>\nvar x = 1;</script>SCRIPT',
+    HTML_LINK_MISNESTED_SCRIPT = 'This is <a href="#html">HTML</a> with a <scr<script></script>ipt src="evil.js">SCRIPT',
     HTML_LINK = 'This is <a href="#html">HTML</a> with a SCRIPT',
     HTML_PLAIN = 'This is HTML with a SCRIPT';
 
@@ -34,6 +35,20 @@ vows.describe('script tests').addBatch({
       var HTML = bleach.sanitize(topic, {mode: 'black', list:['a', 'script']});
       assert.equal(HTML, HTML_PLAIN);
     }
+  },
+
+  'nested malformed tags': {
+    topic: function (){ return HTML_LINK_MISNESTED_SCRIPT; },
+
+    'are eliminated but whitelisted tags are kept': function (topic){
+      var HTML = bleach.sanitize(topic, {mode: 'white', list:['a']});
+      assert.equal(HTML, HTML_LINK);
+    },
+
+    'are eliminated when blacklisted': function (topic){
+      var HTML = bleach.sanitize(topic, {mode: 'black', list:['script']});
+      assert.equal(HTML, HTML_LINK);
+    },
   }
 
 }).export(module);
